@@ -1,0 +1,10 @@
+*** CUSTOM ADDENDA - Add additional words, stress, and pronunications for the RiTa lexicon here
+*** FORMAT: <word>0 <tab> <phone1> <phone2> ... <phoneN>
+
+cepstral0					k eh1 p s t r ax l 
+freetts0					f r iy1 t iy t iy eh s
+jsapi0						jh ey s ae1 p iy
+lamere0						l ax m iy1 r
+cmu0							s iy eh m y uw1
+yankelovich0			y ey1 ng k ax l ow1 v ih ch
+tm0								t iy eh m

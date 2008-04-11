@@ -7,12 +7,14 @@ import java.io.*;
 import lt.tailer.CollectionBox;
 import lt.tailer.LogFileTailer;
 import lt.tailer.LogFileTailerListener;
+import lt.wordsmith.GeneratorListener;
+import lt.wordsmith.WordInfo;
 
 /**
  * Implements console-based log file tailing, or more specifically, tail
  * following: it is somewhat equivalent to the unix command "tail -f"
  */
-public class Tail implements LogFileTailerListener
+public class Tail implements LogFileTailerListener, GeneratorListener
 {
 	/**
 	 * The log file tailer
@@ -26,7 +28,7 @@ public class Tail implements LogFileTailerListener
 	 */
 	public Tail(String filename)
 	{
-		cb = new CollectionBox();
+		cb = new CollectionBox(this);
 		tailer = new LogFileTailer(new File(filename), 1000, false);
 		tailer.addLogFileTailerListener(this);
 		tailer.start();
@@ -55,5 +57,15 @@ public class Tail implements LogFileTailerListener
 			System.exit(0);
 		}
 		Tail tail = new Tail("/var/log/system.log");//(args[0]);
+	}
+
+	public void generateSentence(Collection<WordInfo> c)
+	{
+		for (Iterator<WordInfo> it = c.iterator(); it.hasNext(); )
+		{
+			WordInfo w = it.next();
+			System.out.print(w.word + "(" + w.pos.getLabel() + "), ");
+		}
+		System.out.print("\n");
 	}
 }
