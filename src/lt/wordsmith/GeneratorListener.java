@@ -1,8 +1,10 @@
 package lt.wordsmith;
 
-import java.util.Collection;
+import java.util.HashMap;
+import java.util.Set;
+import net.didion.jwnl.data.POS;
 
 public interface GeneratorListener
 {
-	void generateSentence(Collection<WordInfo> c);
+	void generateSentence(HashMap<POS, Set<String>> _ms);
 }

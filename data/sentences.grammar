@@ -1,0 +1,24 @@
+ {
+ <start>
+ <np> <vp>
+ }
+
+ {
+ <np>
+ <det> <adjs> xnx
+ }
+ 
+ {
+ <adjs>
+ xx | xadjx | xadjx <adjs>
+ }
+ 
+ {
+ <vp>
+ xvx | <vp> xvx
+ }
+ 
+ {
+ <det>
+ a | the | my
+ }

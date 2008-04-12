@@ -3,8 +3,10 @@ package lt.tailer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import lt.wordsmith.GeneratorListener;
 import lt.wordsmith.WordInfo;
@@ -23,46 +25,66 @@ import rita.wordnet.WordnetError;
 public class CollectionBox
 {
 	private static final int MAP_SIZE_THRESH = 6;
+	private HashMap<POS, Set<String>> _ms;
 	private HashMap<String, WordInfo> _m;
 	private RiWordnet _wNet;
-	private GeneratorListener _listener;
 	
-	public CollectionBox(GeneratorListener l)
+	public CollectionBox()
 	{
+		_ms = new HashMap<POS, Set<String>>();
 		_m = new HashMap<String, WordInfo>();
 		_wNet = new RiWordnet(null);
-		_listener = l;
 	}
 
 	public void addLine(String line)
 	{
+		System.out.println(line);
 		line = new String(line);
 		line = line.toLowerCase();
 		String[] chunks = line.split("[_-[\\s]+]");
 		for (int i = 4; i < chunks.length; i++)
 		{
 			String w = chunks[i].replaceAll("[^a-zA-Z]", "");
-			if (_wNet.exists(w))
+			if ((w.length() > 3) && (_wNet.exists(w)))
 			{
 				String[] res = _wNet.getPos(w);
-				WordInfo wi = new WordInfo(w, (res[0] != null ? changePOS(res[0]) : null));
-				putWord(w, wi);
-			}
-			else if ((w.compareTo(" ") != 0) && (w.compareTo("") != 0))
-			{
-				putWord(w, new WordInfo(w, POS.NOUN));
+				POS p = null;
+				if ((changePOS(res[0]) == POS.NOUN) && (res.length > 1))
+				{
+					p = changePOS(res[1]);
+				}
+				else
+				{
+					p = (res[0] != null ? changePOS(res[0]) : null);
+				}
+				putWord(w, p);
 			}
 		}
 	}
 	
-	private void putWord(String w, WordInfo wi)
+	private void putWord(String w, POS p)
 	{
-		_m.put(w, wi);
-		
-		if (_m.size() % MAP_SIZE_THRESH == 0)
+		Set<String> s = _ms.get(p);
+		if (s == null)
 		{
-			_listener.generateSentence(_m.values());
+			s = new HashSet<String>();
+			_ms.put(p, s);
 		}
+		
+		s.add(w);
+		
+		String sizes = "Sizes: ";
+		for (Iterator<Set<String>> it = _ms.values().iterator(); it.hasNext(); )
+		{
+			Set<String> stmp = it.next();
+			sizes += stmp.size() + ", ";
+			Object[] ss = stmp.toArray();
+			String vals = "";
+			for (int i = 0; i < ss.length; i++)
+				vals += (String)ss[i] + ", ";
+			System.out.println(vals);
+		}
+		System.out.println(sizes);
 	}
 
 	private POS changePOS(String string)
@@ -80,6 +102,24 @@ public class CollectionBox
 		default :
 			return null;
 		}
+	}
+
+	public boolean isReady()
+	{
+		for (Iterator<Set<String>> it = _ms.values().iterator(); it.hasNext(); )
+		{
+			Set<String> s = it.next();
+			if (s.size() < MAP_SIZE_THRESH)
+				return false;
+		}
+		return true;
+	}
+
+	public HashMap<POS, Set<String>> getWordMap()
+	{
+		HashMap<POS, Set<String>> tmp = _ms;
+		//_ms = new HashMap<POS, Set<String>>();
+		return tmp;
 	}
 
 }
