@@ -24,7 +24,7 @@ public class SentenceMaker implements GeneratorListener
 		_cb = cb;
 		
 		Timer t = new Timer();
-		t.schedule(new CollectorChecker(), 1000);
+		t.schedule(new CollectorChecker(), 1000,1000);
 	}
 	
 	public void generateSentence(HashMap<POS, Set<String>> _ms)
