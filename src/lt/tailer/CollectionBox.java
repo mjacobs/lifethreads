@@ -1,30 +1,18 @@
 package lt.tailer;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
-import lt.wordsmith.GeneratorListener;
 import lt.wordsmith.WordInfo;
 
-import processing.core.PApplet;
-
-import net.didion.jwnl.JWNLException;
-import net.didion.jwnl.data.IndexWord;
-import net.didion.jwnl.data.IndexWordSet;
 import net.didion.jwnl.data.POS;
-import net.didion.jwnl.dictionary.Dictionary;
-
 import rita.wordnet.RiWordnet;
-import rita.wordnet.WordnetError;
 
 public class CollectionBox
 {
-	private static final int MAP_SIZE_THRESH = 6;
+	private static final int MAP_SIZE_THRESH = 4;
 	private HashMap<POS, Set<String>> _ms;
 	private HashMap<String, WordInfo> _m;
 	private RiWordnet _wNet;
@@ -38,7 +26,7 @@ public class CollectionBox
 
 	public void addLine(String line)
 	{
-		System.out.println(line);
+		//System.out.println(line);
 		line = new String(line);
 		line = line.toLowerCase();
 		String[] chunks = line.split("[_-[\\s]+]");
@@ -82,9 +70,9 @@ public class CollectionBox
 			String vals = "";
 			for (int i = 0; i < ss.length; i++)
 				vals += (String)ss[i] + ", ";
-			System.out.println(vals);
+			//System.out.println(vals);
 		}
-		System.out.println(sizes);
+		//System.out.println(sizes);
 	}
 
 	private POS changePOS(String string)
@@ -106,19 +94,20 @@ public class CollectionBox
 
 	public boolean isReady()
 	{
+		int cnt = 0;
 		for (Iterator<Set<String>> it = _ms.values().iterator(); it.hasNext(); )
 		{
+			cnt++;
 			Set<String> s = it.next();
 			if (s.size() < MAP_SIZE_THRESH)
 				return false;
 		}
-		return true;
+		return (cnt == 4) ? true : false;
 	}
 
 	public HashMap<POS, Set<String>> getWordMap()
 	{
 		HashMap<POS, Set<String>> tmp = _ms;
-		//_ms = new HashMap<POS, Set<String>>();
 		return tmp;
 	}
 
