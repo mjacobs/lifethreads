@@ -1,24 +1,26 @@
  {
  <start>
  <np> <vp>
+ I <vp> <np>
  }
 
  {
  <np>
- <det> <adjs> xnx
+ <det> <adjs> xnounx
  }
  
  {
  <adjs>
- xx | xadjx | xadjx <adjs>
+ xx | xadjectivex | xadjectivex , <adjs>
  }
  
  {
  <vp>
- xvx | <vp> xvx
+ xverbx | <vp> and xverbx 
  }
  
  {
  <det>
- a | the | my
+ a | the | my | one
  }
+ 

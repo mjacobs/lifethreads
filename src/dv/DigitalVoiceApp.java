@@ -87,7 +87,8 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 			System.out.println("Usage: Tail <filename>");
 			System.exit(0);
 		}
-		DigitalVoiceApp tail = new DigitalVoiceApp(new String[] { "/var/log/syslog" , "/var/log/messages" , "/var/log/debug", "/var/log/auth.log"});
+		//DigitalVoiceApp tail = new DigitalVoiceApp(new String[] { "/var/log/syslog" , "/var/log/messages" , "/var/log/debug", "/var/log/auth.log"});
+		DigitalVoiceApp tail = new DigitalVoiceApp(new String[] { "/var/log/system.log" , "/var/log/secure.log" , "/var/log/fsck_hfs.log"});
 	}
 
 	public void getSentence(String sentence){
