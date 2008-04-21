@@ -102,12 +102,11 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 		// DigitalVoiceApp tail = new DigitalVoiceApp(new String[] {
 		// "/var/log/syslog" , "/var/log/messages" , "/var/log/debug",
 		// "/var/log/auth.log"});
-		/*DigitalVoiceApp tail = new DigitalVoiceApp(new String[] {
-				"/var/log/syslog" , "/var/log/messages" , "/var/log/debug", "/var/log/auth.log"
-		});*/
 		DigitalVoiceApp tail = new DigitalVoiceApp(new String[] {
-				"/var/log/system.log", "/var/log/secure.log",
-				"/var/log/fsck_hfs.log" });
+				"/var/log/syslog" , "/var/log/messages" , "/var/log/debug", "/var/log/auth.log"
+		});
+		/*		"/var/log/system.log", "/var/log/secure.log",
+				"/var/log/fsck_hfs.log" });*/
 	}
 
 	public void getSentence(String sentence)
@@ -122,8 +121,8 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 		{
 			updateCount++;
 			String[] words = post.split(" ");
-			String title = words.length >= 1 ? 
-					Integer.toBinaryString(Integer.valueOf(words[0]).intValue()) : "01";
+			String title = words.length >= 2 ? 
+					strToBinStr(words[1]) : "01";
 			System.out.println(title);
 			try
 			{
@@ -159,6 +158,18 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 				+ "/posts/default");
 		return myService.insert(postUrl, myEntry);
 	}
+	
+	private String strToBinStr(String in)
+	{
+		String res = new String();
+		char[] chars = in.toCharArray();
+		for (int c = 0; c < chars.length; c++)
+		{
+			res += Integer.toBinaryString((int) chars[c]);
+		}
+		return res;
+	}
+
 
 	private class GetFileTimer extends TimerTask
 	{
