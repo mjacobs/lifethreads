@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import dv.SentenceListener;
 import dv.tailer.CollectionBox;
 import net.didion.jwnl.data.POS;
 import rita.RiGrammar;
@@ -16,15 +17,16 @@ public class SentenceMaker implements GeneratorListener
 	private RiGrammar g;
 	private Random _rand;
 	private RiSpeech rs;
+	private SentenceListener _l;
 	private CollectionBox _cb;
 	private static final String GRAMMAR = "sentences.grammar";
 	
-	public SentenceMaker(CollectionBox cb)
+	public SentenceMaker(SentenceListener listener, CollectionBox cb)
 	{
 		_rand = new Random();
 		g = new RiGrammar(null, GRAMMAR);
 		_cb = cb;
-		
+		_l = listener;
         RiSpeech.setTTSEnabled(true);
         rs = new RiSpeech(null);
         rs.setVoicePitch(60);
@@ -65,6 +67,7 @@ public class SentenceMaker implements GeneratorListener
 
 		System.out.println(exp);
 		rs.speak(exp);
+		_l.getSentence(exp);
 	}
 	
 	private class CollectorChecker extends TimerTask
