@@ -5,7 +5,8 @@
 
  {
  <begin>
- I | Today, I | Later, I | Then, I | Exciting news! I | Before I <vp> <np> , I
+ [3] I | [3] Today, I | [2] Later, I | [2] Then, I | Exciting news! I | Before I <vp> <np> , I |
+ I can | I will
  }
 
 
