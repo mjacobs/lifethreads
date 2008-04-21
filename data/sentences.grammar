@@ -1,7 +1,13 @@
  {
  <start>
- <np> <vp> | I <vp> <np>
+ <np> <vp> | <begin> <vp> <np>
  }
+
+ {
+ <begin>
+ I | Today, I | Later, I | Then, I | Exciting news! I | Before I <vp> <np> , I
+ }
+
 
  {
  <np>
@@ -10,16 +16,21 @@
  
  {
  <adjs>
- xx | xadjectivex | xadjectivex , <adjs>
+ [3] xx | [3] xadjectivex | <adjs> , xadjectivex and xadjectivex | [2] xadjectivex and xadjectivex
  }
  
  {
  <vp>
- xverbx | <vp> and xverbx 
+ [3] <verb> | <vp> , <verb> and <verb> | [2] <verb> and <verb>
+ }
+ 
+ {
+ <verb>
+ xverbx | xverbx | xadverbx xverbx
  }
  
  {
  <det>
- a | the | my | one
+ the | my | one | my system's | my hard drive's
  }
  
