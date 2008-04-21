@@ -115,8 +115,8 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 		
 		post = post + " " + sentence;
 		sentenceCount++;
-		// int n = ((int) Math.random()*6) +2;
-		int n = 1;
+		int n = ((int) Math.random()*5) + 2;
+		//int n = 1;
 		if (sentenceCount >= n)
 		{
 			updateCount++;

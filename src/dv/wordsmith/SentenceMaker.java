@@ -67,7 +67,9 @@ public class SentenceMaker implements GeneratorListener
 			_ms.get(POS.ADVERB).remove(word);
 			exp = exp.replaceFirst("xadverbx", word);
 		}
-		_l.getSentence(exp);
+		String first = exp.substring(0,1).toUpperCase();
+		exp = first + exp.substring(1);
+		_l.getSentence(exp+".");
 	}
 	
 	private class CollectorChecker extends TimerTask
