@@ -94,7 +94,6 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 		int n = 1;
 		if (sentenceCount>=n){
 			updateCount++;
-			int id = 6291120192239929914;
 			String title = "Entry Number "+ String.valueOf(updateCount);
 			try{
 				DigitalVoiceApp.createPost(gserv, "6291120192239929914", title, 
