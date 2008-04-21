@@ -49,6 +49,8 @@ public class SentenceMaker implements GeneratorListener
 		{
 			String word = wordsV[_rand.nextInt(wordsV.length)];
 			_ms.get(POS.VERB).remove(word);
+			if (word.substring(word.length()-1).equals("s"))
+				word = word.substring(0, word.length()-1);
 			exp = exp.replaceFirst("xverbx", word);
 		}
 		
