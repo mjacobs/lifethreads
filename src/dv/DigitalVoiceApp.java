@@ -4,17 +4,18 @@ package dv;
 import java.util.*;
 import java.io.*;
 import java.net.URL;
+
 import dv.tailer.CollectionBox;
 import dv.tailer.LogFileTailer;
 import dv.tailer.LogFileTailerListener;
-import dv.wordsmith.GeneratorListener;
+import dv.userinfo.UserTextHelper;
 import dv.wordsmith.SentenceMaker;
-import dv.wordsmith.WordInfo;
-import net.didion.jwnl.data.POS;
 import rita.RiGrammar;
+
 import com.google.gdata.client.*;
 import com.google.gdata.data.*;
 import com.google.gdata.util.*;
+import com.google.gdata.util.ServiceException;
 
 /**
  * Implements console-based log file tailing, or more specifically, tail
@@ -30,10 +31,12 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 	private CollectionBox collectionBox;
 	private SentenceMaker sentenceMaker;
 	private RiGrammar grammar;
+	private UserTextHelper scanner;
 	private int sentenceCount;
 	private String post;
 	private GoogleService gserv;
 	private int updateCount;
+	
 	/**
 	 * Creates a new Tail instance to follow the specified file
 	 */
