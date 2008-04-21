@@ -1,7 +1,6 @@
  {
  <start>
- <np> <vp>
- I <vp> <np>
+ <np> <vp> | I <vp> <np>
  }
 
  {

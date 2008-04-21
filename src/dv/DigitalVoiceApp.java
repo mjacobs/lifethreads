@@ -36,7 +36,8 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 	private String post;
 	private GoogleService gserv;
 	private int updateCount;
-	
+	private Timer t;
+
 	/**
 	 * Creates a new Tail instance to follow the specified file
 	 */
@@ -46,13 +47,20 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 		collectionBox = new CollectionBox();
 		sentenceMaker = new SentenceMaker(this, collectionBox);
 		tailer = new LogFileTailer[filenames.length];
-		sentenceCount=0;
+		sentenceCount = 0;
 		post = new String();
 		gserv = new GoogleService("blogger", "fourteen-digitalVoice-1");
 		updateCount = 0;
-		try{
-			gserv.setUserCredentials("fourteenz.computer@gmail.com", "faceplz!");
-		} catch (AuthenticationException e){
+		t = new Timer();
+		t.schedule(new GetFileTimer(), 0, 10000);
+
+		try
+		{
+			gserv
+					.setUserCredentials("fourteenz.computer@gmail.com",
+							"faceplz!");
+		} catch (AuthenticationException e)
+		{
 			e.printStackTrace();
 		}
 
@@ -62,7 +70,7 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 			tailer[i].addLogFileTailerListener(this);
 			tailer[i].start();
 		}
-		//this.getSentence("Testing 1");
+		// this.getSentence("Testing 1");
 	}
 
 	/**
@@ -74,7 +82,7 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 	public void newLogFileLine(String line)
 	{
 		collectionBox.addLine(line);
-		//System.out.println(line);
+		// System.out.println(line);
 	}
 
 	/**
@@ -87,47 +95,73 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 			System.out.println("Usage: Tail <filename>");
 			System.exit(0);
 		}
-		//DigitalVoiceApp tail = new DigitalVoiceApp(new String[] { "/var/log/syslog" , "/var/log/messages" , "/var/log/debug", "/var/log/auth.log"});
-		DigitalVoiceApp tail = new DigitalVoiceApp(new String[] { "/var/log/system.log" , "/var/log/secure.log" , "/var/log/fsck_hfs.log"});
+		// DigitalVoiceApp tail = new DigitalVoiceApp(new String[] {
+		// "/var/log/syslog" , "/var/log/messages" , "/var/log/debug",
+		// "/var/log/auth.log"});
+		DigitalVoiceApp tail = new DigitalVoiceApp(new String[] {
+				"/var/log/system.log", "/var/log/secure.log",
+				"/var/log/fsck_hfs.log" });
 	}
 
-	public void getSentence(String sentence){
-		post = post+" "+sentence;
+	public void getSentence(String sentence)
+	{
+		post = post + " " + sentence;
 		sentenceCount++;
-		//int n = ((int) Math.random()*6) +2;
+		// int n = ((int) Math.random()*6) +2;
 		int n = 1;
-		if (sentenceCount>=n){
+		if (sentenceCount >= n)
+		{
 			updateCount++;
-			String title = "Entry Number "+ String.valueOf(updateCount);
-			try{
-				DigitalVoiceApp.createPost(gserv, "6291120192239929914", title, 
+			String title = "Entry Number " + String.valueOf(updateCount);
+			try
+			{
+				DigitalVoiceApp.createPost(gserv, "6291120192239929914", title,
 						post, "Your Computer Friend", "fourteenz.computer");
-			} catch (ServiceException e){
+			} catch (ServiceException e)
+			{
 				e.printStackTrace();
-			} catch (IOException e){
+			} catch (IOException e)
+			{
 				e.printStackTrace();
 			}
-			
-			sentenceCount=0;
+
+			sentenceCount = 0;
 			post = new String();
 		}
 	}
-	public static Entry createPost(
-			GoogleService myService, String blogID, String title,
-		    String content, String authorName, String userName)
-		    throws ServiceException, IOException {
-		
-		  // Create the entry to insert
-		  Entry myEntry = new Entry();
-		  myEntry.setTitle(new PlainTextConstruct(title));
-		  myEntry.setContent(new PlainTextConstruct(content));
-		  Person author = new Person(authorName, null, userName);
-		  myEntry.getAuthors().add(author);
 
-		  // Ask the service to insert the new entry
-		  URL postUrl = new URL("http://www.blogger.com/feeds/" + blogID + "/posts/default");
-		  return myService.insert(postUrl, myEntry);
+	public static Entry createPost(GoogleService myService, String blogID,
+			String title, String content, String authorName, String userName)
+			throws ServiceException, IOException
+	{
+
+		// Create the entry to insert
+		Entry myEntry = new Entry();
+		myEntry.setTitle(new PlainTextConstruct(title));
+		myEntry.setContent(new PlainTextConstruct(content));
+		Person author = new Person(authorName, null, userName);
+		myEntry.getAuthors().add(author);
+
+		// Ask the service to insert the new entry
+		URL postUrl = new URL("http://www.blogger.com/feeds/" + blogID
+				+ "/posts/default");
+		return myService.insert(postUrl, myEntry);
+	}
+
+	private class GetFileTimer extends TimerTask
+	{
+		private UserTextHelper uth;
+
+		public GetFileTimer()
+		{
+			uth = new UserTextHelper();
 		}
 
-	
+		public void run()
+		{
+			getSentence(uth.getRandomFile());
+		}
+
+	}
+
 }
