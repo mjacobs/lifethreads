@@ -11,11 +11,11 @@ import dv.tailer.LogFileTailerListener;
 import dv.userinfo.UserTextHelper;
 import dv.wordsmith.SentenceMaker;
 import rita.RiGrammar;
+import rita.RiSpeech;
 
 import com.google.gdata.client.*;
 import com.google.gdata.data.*;
 import com.google.gdata.util.*;
-import com.google.gdata.util.ServiceException;
 
 /**
  * Implements console-based log file tailing, or more specifically, tail
@@ -37,6 +37,7 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 	private GoogleService gserv;
 	private int updateCount;
 	private Timer t;
+	private RiSpeech rs;
 
 	/**
 	 * Creates a new Tail instance to follow the specified file
@@ -52,12 +53,16 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 		gserv = new GoogleService("blogger", "fourteen-digitalVoice-1");
 		updateCount = 0;
 		t = new Timer();
-		t.schedule(new GetFileTimer(), 0, 10000);
+		//t.schedule(new GetFileTimer(), 0, 10000);
 
+        RiSpeech.setTTSEnabled(true);
+        rs = new RiSpeech(null);
+        rs.setVoicePitch(60);
+        rs.setVoiceRate(120);
+		
 		try
 		{
-			gserv
-					.setUserCredentials("fourteenz.computer@gmail.com",
+			gserv.setUserCredentials("fourteenz.computer@gmail.com",
 							"faceplz!");
 		} catch (AuthenticationException e)
 		{
@@ -70,7 +75,6 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 			tailer[i].addLogFileTailerListener(this);
 			tailer[i].start();
 		}
-		// this.getSentence("Testing 1");
 	}
 
 	/**
@@ -98,6 +102,9 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 		// DigitalVoiceApp tail = new DigitalVoiceApp(new String[] {
 		// "/var/log/syslog" , "/var/log/messages" , "/var/log/debug",
 		// "/var/log/auth.log"});
+		/*DigitalVoiceApp tail = new DigitalVoiceApp(new String[] {
+				"/var/log/syslog" , "/var/log/messages" , "/var/log/debug", "/var/log/auth.log"
+		});*/
 		DigitalVoiceApp tail = new DigitalVoiceApp(new String[] {
 				"/var/log/system.log", "/var/log/secure.log",
 				"/var/log/fsck_hfs.log" });
@@ -105,6 +112,8 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 
 	public void getSentence(String sentence)
 	{
+		rs.speak(sentence);
+		
 		post = post + " " + sentence;
 		sentenceCount++;
 		// int n = ((int) Math.random()*6) +2;
@@ -112,7 +121,10 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 		if (sentenceCount >= n)
 		{
 			updateCount++;
-			String title = "Entry Number " + String.valueOf(updateCount);
+			String[] words = post.split(" ");
+			String title = words.length >= 1 ? 
+					Integer.toBinaryString(Integer.valueOf(words[0]).intValue()) : "01";
+			System.out.println(title);
 			try
 			{
 				DigitalVoiceApp.createPost(gserv, "6291120192239929914", title,

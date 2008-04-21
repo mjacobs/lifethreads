@@ -73,7 +73,7 @@ public class UserTextHelper
 					}
 					else if (files[i].getName().endsWith(".doc"))
 					{
-						try
+						/*try
 						{
 							we = new WordExtractor(new FileInputStream(files[i]));
 						} catch (FileNotFoundException e)
@@ -85,7 +85,7 @@ public class UserTextHelper
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						return we.getText();
+						return we.getText();*/
 					}
 				} 
 				else if (files[i].isDirectory())
