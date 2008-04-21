@@ -3,6 +3,7 @@ package dv;
 //Import the Java classes
 import java.util.*;
 import java.io.*;
+import java.net.URL;
 import dv.tailer.CollectionBox;
 import dv.tailer.LogFileTailer;
 import dv.tailer.LogFileTailerListener;
@@ -11,7 +12,9 @@ import dv.wordsmith.SentenceMaker;
 import dv.wordsmith.WordInfo;
 import net.didion.jwnl.data.POS;
 import rita.RiGrammar;
-import com.google.gdata.data.extensions.*;
+import com.google.gdata.client.*;
+import com.google.gdata.data.*;
+import com.google.gdata.util.*;
 
 /**
  * Implements console-based log file tailing, or more specifically, tail
@@ -27,7 +30,10 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 	private CollectionBox collectionBox;
 	private SentenceMaker sentenceMaker;
 	private RiGrammar grammar;
-
+	private int sentenceCount;
+	private String post;
+	private GoogleService gserv;
+	private int updateCount;
 	/**
 	 * Creates a new Tail instance to follow the specified file
 	 */
@@ -37,13 +43,23 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 		collectionBox = new CollectionBox();
 		sentenceMaker = new SentenceMaker(this, collectionBox);
 		tailer = new LogFileTailer[filenames.length];
-		
+		sentenceCount=0;
+		post = new String();
+		gserv = new GoogleService("blogger", "fourteen-digitalVoice-1");
+		updateCount = 0;
+		try{
+			gserv.setUserCredentials("fourteenz.computer@gmail.com", "faceplz!");
+		} catch (AuthenticationException e){
+			e.printStackTrace();
+		}
+
 		for (int i = 0; i < filenames.length; i++)
 		{
 			tailer[i] = new LogFileTailer(new File(filenames[i]), 1000, false);
 			tailer[i].addLogFileTailerListener(this);
 			tailer[i].start();
 		}
+		//this.getSentence("Testing 1");
 	}
 
 	/**
@@ -72,12 +88,32 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 	}
 
 	public void getSentence(String sentence){
-		
+		post = post+" "+sentence;
+		sentenceCount++;
+		//int n = ((int) Math.random()*6) +2;
+		int n = 1;
+		if (sentenceCount>=n){
+			updateCount++;
+			int id = 6291120192239929914;
+			String title = "Entry Number "+ String.valueOf(updateCount);
+			try{
+				DigitalVoiceApp.createPost(gserv, "6291120192239929914", title, 
+						post, "Your Computer Friend", "fourteenz.computer");
+			} catch (ServiceException e){
+				e.printStackTrace();
+			} catch (IOException e){
+				e.printStackTrace();
+			}
+			
+			sentenceCount=0;
+			post = new String();
+		}
 	}
 	public static Entry createPost(
-		    GoogleService myService, String blogID, String title,
+			GoogleService myService, String blogID, String title,
 		    String content, String authorName, String userName)
 		    throws ServiceException, IOException {
+		
 		  // Create the entry to insert
 		  Entry myEntry = new Entry();
 		  myEntry.setTitle(new PlainTextConstruct(title));
