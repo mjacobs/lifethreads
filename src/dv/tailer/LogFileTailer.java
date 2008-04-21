@@ -1,4 +1,4 @@
-package lt.tailer;
+package dv.tailer;
 
 import java.io.*;
 import java.util.*;

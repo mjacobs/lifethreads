@@ -1,4 +1,4 @@
-package lt.wordsmith;
+package dv.wordsmith;
 
 import net.didion.jwnl.data.POS;
 

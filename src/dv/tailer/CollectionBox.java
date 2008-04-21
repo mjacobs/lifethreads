@@ -1,11 +1,11 @@
-package lt.tailer;
+package dv.tailer;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import dv.wordsmith.WordInfo;
 
-import lt.wordsmith.WordInfo;
 
 import net.didion.jwnl.data.POS;
 import rita.wordnet.RiWordnet;

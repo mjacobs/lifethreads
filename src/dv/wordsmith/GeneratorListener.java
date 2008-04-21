@@ -1,4 +1,4 @@
-package lt.wordsmith;
+package dv.wordsmith;
 
 import java.util.HashMap;
 import java.util.Set;

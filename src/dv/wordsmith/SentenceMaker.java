@@ -1,4 +1,4 @@
-package lt.wordsmith;
+package dv.wordsmith;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -6,7 +6,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-import lt.tailer.CollectionBox;
+import dv.tailer.CollectionBox;
 import net.didion.jwnl.data.POS;
 import rita.RiGrammar;
 import rita.RiSpeech;

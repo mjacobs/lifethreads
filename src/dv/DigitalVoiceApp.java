@@ -1,24 +1,24 @@
-package lt.test;
+package dv;
 
 //Import the Java classes
 import java.util.*;
 import java.io.*;
+import dv.tailer.CollectionBox;
+import dv.tailer.LogFileTailer;
+import dv.tailer.LogFileTailerListener;
+import dv.wordsmith.GeneratorListener;
+import dv.wordsmith.SentenceMaker;
+import dv.wordsmith.WordInfo;
 import net.didion.jwnl.data.POS;
 
 import rita.RiGrammar;
 
-import lt.tailer.CollectionBox;
-import lt.tailer.LogFileTailer;
-import lt.tailer.LogFileTailerListener;
-import lt.wordsmith.GeneratorListener;
-import lt.wordsmith.SentenceMaker;
-import lt.wordsmith.WordInfo;
 
 /**
  * Implements console-based log file tailing, or more specifically, tail
  * following: it is somewhat equivalent to the unix command "tail -f"
  */
-public class Tail implements LogFileTailerListener
+public class DigitalVoiceApp implements LogFileTailerListener
 {
 	private static final String GRAMMAR = "sentences.grammar";
 	/**
@@ -32,7 +32,7 @@ public class Tail implements LogFileTailerListener
 	/**
 	 * Creates a new Tail instance to follow the specified file
 	 */
-	public Tail(String[] filenames)
+	public DigitalVoiceApp(String[] filenames)
 	{
 		g = new RiGrammar(null, GRAMMAR);
 		cb = new CollectionBox();
@@ -69,7 +69,7 @@ public class Tail implements LogFileTailerListener
 			System.out.println("Usage: Tail <filename>");
 			System.exit(0);
 		}
-		Tail tail = new Tail(new String[] { "/var/log/syslog" , "/var/log/messages" , "/var/log/debug", "/var/log/auth.log"});
+		DigitalVoiceApp tail = new DigitalVoiceApp(new String[] { "/var/log/syslog" , "/var/log/messages" , "/var/log/debug", "/var/log/auth.log"});
 	}
 
 }

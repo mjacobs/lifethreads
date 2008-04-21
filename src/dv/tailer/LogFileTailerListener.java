@@ -1,4 +1,4 @@
-package lt.tailer;
+package dv.tailer;
 
 /**
  * Provides listener notification methods when a tailed log file is updated
