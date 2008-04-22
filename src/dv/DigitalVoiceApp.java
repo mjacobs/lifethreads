@@ -24,6 +24,7 @@ import com.google.gdata.util.*;
 public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 {
 	private static final String GRAMMAR = "sentences.grammar";
+	private static final String MBROLA_BINARY_FOLDER = "/Users/matt/workspace/LifeThreads/lib/mbrola/";
 	/**
 	 * The log file tailer
 	 */
@@ -38,7 +39,7 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 	private int updateCount;
 	private Timer t;
 	private RiSpeech rs;
-
+	private int sentenceNum;
 	/**
 	 * Creates a new Tail instance to follow the specified file
 	 */
@@ -49,6 +50,7 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 		sentenceMaker = new SentenceMaker(this, collectionBox);
 		tailer = new LogFileTailer[filenames.length];
 		sentenceCount = 0;
+		sentenceNum = (int) (Math.random()*5) +2;
 		post = new String();
 		gserv = new GoogleService("blogger", "fourteen-digitalVoice-1");
 		updateCount = 0;
@@ -57,9 +59,9 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 
         RiSpeech.setTTSEnabled(true);
         rs = new RiSpeech(null);
-        rs.setVoicePitch(60);
-        rs.setVoiceRate(120);
-		
+        //rs.setMbrolaBase(MBROLA_BINARY_FOLDER);
+        //rs.setVoice("mbrola_us2");
+		System.out.println(rs.getVoiceDescriptions());
 		try
 		{
 			gserv.setUserCredentials("fourteenz.computer@gmail.com",
@@ -103,22 +105,24 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 		// "/var/log/syslog" , "/var/log/messages" , "/var/log/debug",
 		// "/var/log/auth.log"});
 		DigitalVoiceApp tail = new DigitalVoiceApp(new String[] {
-				"/var/log/syslog" , "/var/log/messages" , "/var/log/debug", "/var/log/auth.log"
-		});
-		/*		"/var/log/system.log", "/var/log/secure.log",
-				"/var/log/fsck_hfs.log" });*/
+				//"/var/log/syslog" , "/var/log/messages" , "/var/log/debug", "/var/log/auth.log"
+		//});
+				"/var/log/system.log", "/var/log/secure.log",
+				"/var/log/fsck_hfs.log" , "/var/log/windowserver.log", "/var/log/daily.out" });
 	}
 
 	public void getSentence(String sentence)
 	{
 		rs.speak(sentence);
-		
+		System.out.println(sentence);
 		post = post + " " + sentence;
 		sentenceCount++;
-		int n = ((int) Math.random()*5) + 2;
+		//System.out.println("n value: "+n);
 		//int n = 1;
-		if (sentenceCount >= n)
+		if (sentenceCount >= sentenceNum)
 		{
+			System.out.println("sentenceNum: "+sentenceNum);
+			sentenceNum = (int) (Math.random()*5) +2;
 			updateCount++;
 			String[] words = post.split(" ");
 			String title = words.length >= 2 ? 
@@ -137,6 +141,7 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 			}
 
 			sentenceCount = 0;
+			System.out.println(post);
 			post = new String();
 		}
 	}
@@ -156,7 +161,10 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 		// Ask the service to insert the new entry
 		URL postUrl = new URL("http://www.blogger.com/feeds/" + blogID
 				+ "/posts/default");
-		return myService.insert(postUrl, myEntry);
+		System.out.println("entry: "+myEntry);
+		Entry e = myService.insert(postUrl, myEntry);
+		System.out.println("inserted entry: "+e);
+		return e;
 	}
 	
 	private String strToBinStr(String in)

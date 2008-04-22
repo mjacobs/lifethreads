@@ -63,7 +63,7 @@ public class SentenceMaker implements GeneratorListener
 		String[] wordsADV = _ms.get(POS.ADVERB).toArray(new String[] {});		
 		while (exp.indexOf("xadverbx") >= 0)
 		{
-			String word = wordsA[_rand.nextInt(wordsADV.length)];
+			String word = wordsADV[_rand.nextInt(wordsADV.length)];
 			_ms.get(POS.ADVERB).remove(word);
 			exp = exp.replaceFirst("xadverbx", word);
 		}
