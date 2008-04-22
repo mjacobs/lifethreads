@@ -105,10 +105,10 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 		// "/var/log/syslog" , "/var/log/messages" , "/var/log/debug",
 		// "/var/log/auth.log"});
 		DigitalVoiceApp tail = new DigitalVoiceApp(new String[] {
-				//"/var/log/syslog" , "/var/log/messages" , "/var/log/debug", "/var/log/auth.log"
-		//});
-				"/var/log/system.log", "/var/log/secure.log",
-				"/var/log/fsck_hfs.log" , "/var/log/windowserver.log", "/var/log/daily.out" });
+				"/var/log/syslog" , "/var/log/messages" , "/var/log/debug", "/var/log/auth.log"
+		});
+				//"/var/log/system.log", "/var/log/secure.log",
+	//			"/var/log/fsck_hfs.log" , "/var/log/windowserver.log", "/var/log/daily.out" });
 	}
 
 	public void getSentence(String sentence)

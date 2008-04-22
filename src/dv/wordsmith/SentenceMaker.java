@@ -1,6 +1,5 @@
 package dv.wordsmith;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Set;
@@ -10,7 +9,6 @@ import dv.SentenceListener;
 import dv.tailer.CollectionBox;
 import net.didion.jwnl.data.POS;
 import rita.RiGrammar;
-import rita.RiSpeech;
 
 public class SentenceMaker implements GeneratorListener
 {
