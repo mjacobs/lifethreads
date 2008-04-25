@@ -17,17 +17,10 @@ import com.google.gdata.client.*;
 import com.google.gdata.data.*;
 import com.google.gdata.util.*;
 
-/**
- * Implements console-based log file tailing, or more specifically, tail
- * following: it is somewhat equivalent to the unix command "tail -f"
- */
 public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 {
 	private static final String GRAMMAR = "sentences.grammar";
-	private static final String MBROLA_BINARY_FOLDER = "/Users/matt/workspace/LifeThreads/lib/mbrola/";
-	/**
-	 * The log file tailer
-	 */
+	
 	private LogFileTailer[] tailer;
 	private CollectionBox collectionBox;
 	private SentenceMaker sentenceMaker;
@@ -40,11 +33,11 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 	private Timer t;
 	private RiSpeech rs;
 	private int sentenceNum;
-	/**
-	 * Creates a new Tail instance to follow the specified file
-	 */
+	private Random r;
+
 	public DigitalVoiceApp(String[] filenames)
 	{
+		r = new Random();
 		grammar = new RiGrammar(null, GRAMMAR);
 		collectionBox = new CollectionBox();
 		sentenceMaker = new SentenceMaker(this, collectionBox);
@@ -96,19 +89,16 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 	 */
 	public static void main(String[] args)
 	{
-		if (args.length < 0)
+		if (args.length <= 0)
 		{
-			System.out.println("Usage: Tail <filename>");
-			System.exit(0);
+			DigitalVoiceApp tail = new DigitalVoiceApp(new String[] {
+					"/var/log/syslog" , "/var/log/messages" , "/var/log/debug", "/var/log/auth.log"
+			});
 		}
-		// DigitalVoiceApp tail = new DigitalVoiceApp(new String[] {
-		// "/var/log/syslog" , "/var/log/messages" , "/var/log/debug",
-		// "/var/log/auth.log"});
-		DigitalVoiceApp tail = new DigitalVoiceApp(new String[] {
-				"/var/log/syslog" , "/var/log/messages" , "/var/log/debug", "/var/log/auth.log"
-		});
-				//"/var/log/system.log", "/var/log/secure.log",
-	//			"/var/log/fsck_hfs.log" , "/var/log/windowserver.log", "/var/log/daily.out" });
+		else
+		{
+			DigitalVoiceApp tail = new DigitalVoiceApp(args);
+		}
 	}
 
 	public void getSentence(String sentence)
@@ -125,8 +115,7 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 			sentenceNum = (int) (Math.random()*5) +2;
 			updateCount++;
 			String[] words = post.split(" ");
-			String title = words.length >= 2 ? 
-					strToBinStr(words[1]) : "01";
+			String title = strToBinStr(words[r.nextInt(words.length)]);
 			System.out.println(title);
 			try
 			{
@@ -161,9 +150,7 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 		// Ask the service to insert the new entry
 		URL postUrl = new URL("http://www.blogger.com/feeds/" + blogID
 				+ "/posts/default");
-		System.out.println("entry: "+myEntry);
 		Entry e = myService.insert(postUrl, myEntry);
-		System.out.println("inserted entry: "+e);
 		return e;
 	}
 	
@@ -177,7 +164,6 @@ public class DigitalVoiceApp implements LogFileTailerListener, SentenceListener
 		}
 		return res;
 	}
-
 
 	private class GetFileTimer extends TimerTask
 	{

@@ -2,11 +2,9 @@ package dv.userinfo;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
